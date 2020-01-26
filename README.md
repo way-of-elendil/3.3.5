@@ -7,6 +7,7 @@
 Bienvenue sur le bugtracker de Way of Elendil
 
 * [Comment rapporter un bug proprement](https://github.com/way-of-elendil/3.3.5/wiki/Comment-rapporter-un-bug-proprement)
+* [Rapporter un bug](https://github.com/way-of-elendil/3.3.5/issues/new/choose)
 * [Liste des bugs recensés](https://github.com/way-of-elendil/3.3.5/issues)
 * [Liste des bugs fermés](https://github.com/way-of-elendil/3.3.5/issues?q=is%3Aissue+is%3Aclosed)
 
