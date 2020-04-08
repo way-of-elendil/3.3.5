@@ -3,6 +3,7 @@ name: Rapport de bug d’arène / champ de bataille / zone PvP
 about: Créez un rapport de bug pour une arène, un champ de bataille ou une zone PvP
 title: "[Class / Sort / Boss / ...] Description courte du bug"
 labels: bug, type-pvp
+projects: 1
 assignees: ''
 
 ---
