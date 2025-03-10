@@ -5,8 +5,7 @@ on:
     types: [opened, labeled]
 
 env:
-  MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   assign_one_project:
@@ -14,8 +13,9 @@ jobs:
     name: Assign to One Project
     steps:
 
-    - name: Assign issues to project 4 (core)
+    - name: Assign issues with `bug` label to their project
       uses: srggrs/assign-one-project-github-action@1.2.1
-      if: github.event.action == 'opened'
+      if: |
+        contains(github.event.issue.labels.*.name, 'bug')
       with:
         project: 'https://github.com/orgs/way-of-elendil/projects/4'
