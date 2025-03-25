@@ -1,0 +1,54 @@
+name: Protect Issues from Unauthorized Closure
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  check_and_reopen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if issue closer is in allowed teams
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.ORG_ACCESS_TOKEN }}  
+          script: |
+            const issue = context.payload.issue;
+            const closer = context.payload.sender.login;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const allowedTeams = ["Support", "Dev-core", "Sysadmin"];
+
+            async function isUserInAnyTeam(user, teams) {
+              for (const team of teams) {
+                try {
+                  const response = await github.rest.teams.getMembershipForUserInOrg({
+                    org: owner,
+                    team_slug: team,
+                    username: user
+                  });
+
+                  if (response.status === 200) {
+                    console.log(`${user} appartient à l'équipe ${team}, fermeture autorisée.`);
+                    return true;
+                  }
+                } catch (error) {
+                  console.log(`${user} n'est pas dans l'équipe ${team} ou l'équipe n'existe pas.`);
+                }
+              }
+              return false;
+            }
+
+            (async () => {
+              const isAuthorized = await isUserInAnyTeam(closer, allowedTeams);
+
+              if (!isAuthorized) {
+                console.log(`L'utilisateur ${closer} n'est dans aucune des équipes autorisées. Réouverture de l'issue.`);
+                await github.rest.issues.update({
+                  owner,
+                  repo,
+                  issue_number: issue.number,
+                  state: "open"
+                });
+              }
+            })();
